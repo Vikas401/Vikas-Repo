@@ -5,15 +5,42 @@ import 'firebase/firestore';
 import 'firebase/auth';
 
 const config =  {
-    apiKey: "AIzaSyDBH0uyIZd-vpisYycZHM7qsLA9_61_TPs",
-    authDomain: "vcommers-fb25b.firebaseapp.com",
-    databaseURL: "https://vcommers-fb25b.firebaseio.com",
-    projectId: "vcommers-fb25b",
-    storageBucket: "vcommers-fb25b.appspot.com",
-    messagingSenderId: "837673801300",
-    appId: "1:837673801300:web:1c17f4094fdf5b3d5fbfc1",
-    measurementId: "G-WFRS9EH25D"
-  };
+  apiKey: "AIzaSyDUQPtt3K7Wq6kLadxi7SkLRxwrD0Kx8Fc",
+  authDomain: "g-commerse.firebaseapp.com",
+  databaseURL: "https://g-commerse.firebaseio.com",
+  projectId: "g-commerse",
+  storageBucket: "g-commerse.appspot.com",
+  messagingSenderId: "749970088543",
+  appId: "1:749970088543:web:981b38cfe1e98f545eb1ea",
+  measurementId: "G-2G6P3K6FWH"
+};
+   export const createUserProfileDocument = async (userAuth, additionalData) => {
+     if (!userAuth) return;
+     
+     const userRef = firestore.doc(`users/${userAuth.uid}`);
+     const snapShot = await userRef.get();
+     
+     if(!snapShot.exists){
+       const { displayName, email} = userAuth;
+
+       const createAt = new Date();
+
+       try{
+         await userRef.set({
+           displayName,
+           email,
+           createAt,
+           ...additionalData
+         })
+
+       }catch(error){
+          
+        console.log('error create user' ,error.message);
+       }
+     }
+     return userRef;
+   };
+ 
 
   firebase.initializeApp(config);
 
